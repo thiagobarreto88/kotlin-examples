@@ -2,6 +2,7 @@ package com.example.demo.controller
 
 import com.example.demo.entity.User
 import com.example.demo.exception.UserNotFoundException
+import com.example.demo.model.CreateUserRequest
 import com.example.demo.model.ErrorMessageModel
 import com.example.demo.repository.UserRepository
 import org.springframework.http.HttpStatus
@@ -13,8 +14,8 @@ import java.util.*
 @RestController
 class Controller (val userRepository: UserRepository){
     @PostMapping("/")
-    fun create(): String {
-        userRepository.save(User(login = "abc", firstname = "Thiago", lastname = "Barreto"))
+    fun create(@RequestBody request : CreateUserRequest): String {
+        userRepository.save(User(login = request.login, firstname = request.firstname, lastname = request.lastname, description = request.description))
         return "OK"
     }
 
