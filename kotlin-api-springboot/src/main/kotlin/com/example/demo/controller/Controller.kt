@@ -5,6 +5,7 @@ import com.example.demo.exception.UserNotFoundException
 import com.example.demo.model.CreateUserRequest
 import com.example.demo.model.ErrorMessageModel
 import com.example.demo.repository.UserRepository
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -12,7 +13,8 @@ import java.text.MessageFormat
 import java.util.*
 
 @RestController
-class Controller (val userRepository: UserRepository){
+class Controller (@Autowired private val userRepository: UserRepository){
+
     @PostMapping("/")
     fun create(@RequestBody request : CreateUserRequest): String {
         userRepository.save(User(login = request.login, firstname = request.firstname, lastname = request.lastname, description = request.description))
@@ -31,7 +33,7 @@ class Controller (val userRepository: UserRepository){
         ex.printStackTrace()
 
         if (ex is UserNotFoundException){
-            var errorMessage = "Usuário não encontrado a partir do login {0}"
+            var errorMessage = "Usuário {0} não encontrado"
             errorMessage = MessageFormat.format(errorMessage, ex.login)
 
             println("Usuário não encontrado")
