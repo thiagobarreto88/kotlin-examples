@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>kotin-api-example</artifactId>
+	<artifactId>kotlin-api-springboot</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>kotin-api-example</name>
+	<name>kotlin-api-springboot</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>11</java.version>
