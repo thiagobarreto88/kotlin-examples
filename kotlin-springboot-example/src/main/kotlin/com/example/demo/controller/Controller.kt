@@ -1,11 +1,13 @@
 package com.example.demo.controller
 
 import com.example.demo.entity.User
+import com.example.demo.exception.UserNotFoundException
+import com.example.demo.model.ErrorMessageModel
 import com.example.demo.repository.UserRepository
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.util.MultiValueMap
 import org.springframework.web.bind.annotation.*
+import java.text.MessageFormat
 import java.util.*
 
 @RestController
@@ -19,35 +21,31 @@ class Controller (val userRepository: UserRepository){
     @GetMapping("/users/{login}")
     fun get(@PathVariable login: String): User? {
 
-        return userRepository.findByLogin(login) ?: throw UserNotFoundException();
+        return userRepository.findByLogin(login) ?: throw UserNotFoundException(login);
 
     }
 
-    @ExceptionHandler
-    fun handleUserNotFoundException(ex: UserNotFoundException): ResponseEntity<ErrorMessageModel> {
+    @ExceptionHandler(value = [(Exception::class)])
+    fun handleException(ex: Exception): ResponseEntity<ErrorMessageModel> {
+        ex.printStackTrace()
 
-        val errorMessage = ErrorMessageModel(
-            HttpStatus.NOT_FOUND.value(),
-            "Usuário não encontrado"
-        )
-        return ResponseEntity(errorMessage, HttpStatus.NOT_FOUND)
+        if (ex is UserNotFoundException){
+            var errorMessage = "Usuário não encontrado a partir do login {0}"
+            errorMessage = MessageFormat.format(errorMessage, ex.login)
+
+            println("Usuário não encontrado")
+            val errorMessageModel = ErrorMessageModel(
+                HttpStatus.NOT_FOUND.value(),
+                errorMessage
+            )
+            return ResponseEntity(errorMessageModel, HttpStatus.NOT_FOUND)
+        }else{
+            val errorMessage = ErrorMessageModel(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                ex.message
+            )
+            return ResponseEntity(errorMessage, HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+
     }
-
-    @ExceptionHandler
-    fun handleUserNotFoundException(ex: Exception): ResponseEntity<ErrorMessageModel> {
-
-        val errorMessage = ErrorMessageModel(
-            HttpStatus.INTERNAL_SERVER_ERROR.value(),
-            ex.message
-        )
-        return ResponseEntity(errorMessage, HttpStatus.INTERNAL_SERVER_ERROR)
-    }
-}
-
-data class ErrorMessageModel(val value: Int, val message: String?)  {
-
-}
-
-class UserNotFoundException : Throwable() {
-
 }
