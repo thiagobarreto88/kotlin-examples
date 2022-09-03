@@ -1,5 +1,6 @@
 package com.example.demo.controller
 
+import com.example.demo.entity.User
 import com.example.demo.exception.UserNotFoundException
 import com.example.demo.model.ErrorMessageModel
 import com.example.demo.repository.ArticleRepository
@@ -11,12 +12,12 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.params.ParameterizedTest
 import org.mockito.Mock
 import org.mockito.Mockito
-import org.mockito.Mockito.times
-import org.mockito.Mockito.verify
+import org.mockito.Mockito.*
 import org.mockito.Spy
 import org.mockito.junit.jupiter.MockitoExtension
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.HttpStatus
@@ -26,25 +27,37 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
+import org.testng.annotations.BeforeClass
 import java.text.MessageFormat
 
-@AutoConfigureMockMvc
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+//@AutoConfigureMockMvc
+//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ExtendWith(SpringExtension::class, MockitoExtension::class)
+@WebMvcTest(Controller::class)
 class ControllerTest {
 
     @Autowired
     private lateinit var mockMvc: MockMvc
 
-    //@MockBean
-    //private var repository: UserRepository
+    @MockBean
+    private lateinit var userRepository : UserRepository
 
     @Spy val controller = Controller(Mockito.mock(UserRepository::class.java))
 
-    //@Spy val controller = Controller(@UserRepository)
-
     @Test
-    fun `test get`() {
+    fun `test getReturnUser`() {
+        Mockito.`when`(userRepository.findByLogin(Mockito.anyString())).thenReturn(User("318756", firstname = "Thiago", lastname = "Barreto", description = null, id = 2))
+
+        mockMvc.get("/users/318756/") {
+        }.andExpect {
+            status { isOk() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+            content { json("""{"login":"318756","firstname":"Thiago", "lastname": "Barreto", "description": null, "id": 2}""") }
+        }
+
+    }
+    @Test
+    fun `test getReturnNotFound`() {
 
         mockMvc.get("/users/userLogin/") {
         }.andExpect {
