@@ -1,6 +1,6 @@
 package com.example.demo.controller
 
-import com.example.demo.entity.User
+import com.example.demo.entity.UserEntity
 import com.example.demo.exception.UserNotFoundException
 import com.example.demo.model.CreateUserRequest
 import com.example.demo.model.ErrorMessageModel
@@ -25,13 +25,12 @@ class Controller (@Inject val userRepository : UserRepository) {
     @Post("/")
     @Produces(MediaType.TEXT_PLAIN)
     fun create(@Body request : CreateUserRequest): String {
-        //userRepository.save(User(login = request.login, firstname = request.firstname, lastname = request.lastname, description = request.description))
+        userRepository.save(UserEntity(login = request.login, firstname = request.firstname, lastname = request.lastname, description = request.description))
         return "OK"
     }
 
     @Get("/users/{login}")
-    fun get(@PathVariable login: String): User? {
-        //return User(login = login, firstname = "Thiago", lastname = "Barreto")
+    fun get(@PathVariable login: String): UserEntity? {
         return userRepository.findByLogin(login) ?: throw UserNotFoundException(login);
 
     }

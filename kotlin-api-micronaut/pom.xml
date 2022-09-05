@@ -33,7 +33,6 @@
 			<scope>compile</scope>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/io.micronaut.data/micronaut-data-model -->
 		<dependency>
 			<groupId>io.micronaut.data</groupId>
 			<artifactId>micronaut-data-model</artifactId>
@@ -146,6 +145,7 @@
 				<configuration>
 					<jvmTarget>${jdk.version}</jvmTarget>
 					<compilerPlugins>
+						<plugin>jpa</plugin>
 						<plugin>all-open</plugin>
 					</compilerPlugins>
 					<pluginOptions>
@@ -249,6 +249,11 @@
 					</execution>
 				</executions>
 				<dependencies>
+					<dependency>
+						<groupId>org.jetbrains.kotlin</groupId>
+						<artifactId>kotlin-maven-noarg</artifactId>
+						<version>${kotlin.version}</version>
+					</dependency>
 					<dependency>
 						<groupId>org.jetbrains.kotlin</groupId>
 						<artifactId>kotlin-maven-allopen</artifactId>
