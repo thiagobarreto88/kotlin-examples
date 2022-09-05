@@ -1,7 +1,6 @@
 package com.example.demo.repository
 
-import com.example.demo.entity.Article
-import com.example.demo.entity.User
+import com.example.demo.entity.Customer
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -12,23 +11,12 @@ import org.springframework.data.repository.findByIdOrNull
 @DataJpaTest
 class RepositoriesTests @Autowired constructor(
     val entityManager: TestEntityManager,
-    val userRepository: UserRepository,
-    val articleRepository: ArticleRepository) {
+    val userRepository: CustomerRepository
+    ) {
 
-    @Test
-    fun `When findByIdOrNull then return Article`() {
-        val juergen = User("springjuergen", "Juergen", "Hoeller")
-        entityManager.persist(juergen)
-        val article = Article("Spring Framework 5.0 goes GA", "Dear Spring community ...", "Lorem ipsum", juergen)
-        entityManager.persist(article)
-        entityManager.flush()
-        val found = articleRepository.findByIdOrNull(article.id!!)
-        assertThat(found).isEqualTo(article)
-    }
-
-    @Test
+     @Test
     fun `When findByLogin then return User`() {
-        val juergen = User("springjuergen", "Juergen", "Hoeller")
+        val juergen = Customer("springjuergen", "Juergen", "Hoeller")
         entityManager.persist(juergen)
         entityManager.flush()
         val user = userRepository.findByLogin(juergen.login)

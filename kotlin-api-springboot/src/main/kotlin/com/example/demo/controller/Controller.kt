@@ -1,10 +1,10 @@
 package com.example.demo.controller
 
-import com.example.demo.entity.User
+import com.example.demo.entity.Customer
 import com.example.demo.exception.UserNotFoundException
 import com.example.demo.model.CreateUserRequest
 import com.example.demo.model.ErrorMessageModel
-import com.example.demo.repository.UserRepository
+import com.example.demo.repository.CustomerRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -13,16 +13,16 @@ import java.text.MessageFormat
 import java.util.*
 
 @RestController
-class Controller (@Autowired private val userRepository: UserRepository){
+class Controller (@Autowired private val userRepository: CustomerRepository){
 
     @PostMapping("/")
     fun create(@RequestBody request : CreateUserRequest): String {
-        userRepository.save(User(login = request.login, firstname = request.firstname, lastname = request.lastname, description = request.description))
+        userRepository.save(Customer(login = request.login, firstname = request.firstname, lastname = request.lastname, description = request.description))
         return "OK"
     }
 
     @GetMapping("/users/{login}")
-    fun get(@PathVariable login: String): User? {
+    fun get(@PathVariable login: String): Customer? {
 
         return userRepository.findByLogin(login) ?: throw UserNotFoundException(login);
 

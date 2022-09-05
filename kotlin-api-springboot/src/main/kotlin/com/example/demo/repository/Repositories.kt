@@ -1,14 +1,9 @@
 package com.example.demo.repository
 
-import com.example.demo.entity.Article
-import com.example.demo.entity.User
+import com.example.demo.entity.Customer
 import org.springframework.data.repository.CrudRepository
 
-interface ArticleRepository : CrudRepository<Article, Long> {
-    fun findByTitle(title: String): Article?
-    fun findAllByOrderByAddedAtDesc(): Iterable<Article>
-}
 
-interface UserRepository : CrudRepository<User, Long> {
-    fun findByLogin(login: String): User?
+interface CustomerRepository : CrudRepository<Customer, Long> {
+    fun findByLogin(login: String): Customer?
 }

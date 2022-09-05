@@ -4,16 +4,7 @@ import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
-class Article(
-    var title: String,
-    var headline: String,
-    var content: String,
-    @ManyToOne var author: User,
-    var addedAt: LocalDateTime = LocalDateTime.now(),
-    @Id @GeneratedValue var id: Long? = null)
-
-@Entity
-class User(
+class Customer(
     var login: String,
     var firstname: String? = null,
     var lastname: String,

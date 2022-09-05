@@ -1,10 +1,9 @@
 package com.example.demo.controller
 
-import com.example.demo.entity.User
+import com.example.demo.entity.Customer
 import com.example.demo.exception.UserNotFoundException
 import com.example.demo.model.ErrorMessageModel
-import com.example.demo.repository.ArticleRepository
-import com.example.demo.repository.UserRepository
+import com.example.demo.repository.CustomerRepository
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
@@ -40,13 +39,13 @@ class ControllerTest {
     private lateinit var mockMvc: MockMvc
 
     @MockBean
-    private lateinit var userRepository : UserRepository
+    private lateinit var userRepository : CustomerRepository
 
-    @Spy val controller = Controller(Mockito.mock(UserRepository::class.java))
+    @Spy val controller = Controller(Mockito.mock(CustomerRepository::class.java))
 
     @Test
     fun `test getReturnUser`() {
-        Mockito.`when`(userRepository.findByLogin(Mockito.anyString())).thenReturn(User("318756", firstname = "Thiago", lastname = "Barreto", description = null, id = 2))
+        Mockito.`when`(userRepository.findByLogin(Mockito.anyString())).thenReturn(Customer("318756", firstname = "Thiago", lastname = "Barreto", description = null, id = 2))
 
         mockMvc.get("/users/318756/") {
         }.andExpect {
