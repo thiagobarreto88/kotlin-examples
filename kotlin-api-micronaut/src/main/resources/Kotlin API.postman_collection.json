@@ -1,0 +1,42 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Kotlin API",
+		"_postman_id": "12288a7d-da29-a694-078c-acb2f682debc",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "POST - Create User",
+			"request": {
+				"url": "http://localhost:8080/",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n \"login\": \"userLogin\",\n \"firstname\": \"Thiago\",\n \"lastname\": \"Barreto\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "GET - User by login",
+			"request": {
+				"url": "http://localhost:8080/users/userLogin/",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
