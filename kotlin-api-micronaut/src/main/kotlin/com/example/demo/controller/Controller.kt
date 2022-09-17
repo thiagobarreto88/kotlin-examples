@@ -5,6 +5,7 @@ import com.example.demo.exception.UserNotFoundException
 import com.example.demo.model.CreateUserRequest
 import com.example.demo.model.ErrorMessageModel
 import com.example.demo.repository.UserRepository
+import io.micronaut.data.exceptions.EmptyResultException
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.*
 import io.micronaut.http.annotation.Controller
@@ -31,8 +32,11 @@ class Controller (@Inject val userRepository : UserRepository) {
 
     @Get("/users/{login}")
     fun get(@PathVariable login: String): UserEntity? {
-        return userRepository.findByLogin(login) ?: throw UserNotFoundException(login);
-
+        try {
+            return userRepository.findByLogin(login) ?: throw UserNotFoundException(login);
+        }catch (ex: EmptyResultException){
+            throw UserNotFoundException(login)
+        }
     }
 
     /*@ExceptionHandler(value = [(Exception::class)])
