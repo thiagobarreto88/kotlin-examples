@@ -20,7 +20,7 @@
 		<kotlin.version>1.6.21</kotlin.version>
 		<kotlin.coroutines.version>1.1.1</kotlin.coroutines.version>
         <jackson-module-kotlin.version>2.9.8</jackson-module-kotlin.version>
-		<exec.mainClass>com.example.ApplicationKt</exec.mainClass>
+		<main.verticle>com.example.demo.controller.RoutesController</main.verticle>
 	</properties>
 	<dependencies>
 		<!--<dependency>
@@ -50,6 +50,17 @@
 		<dependency>
 			<groupId>io.vertx</groupId>
 			<artifactId>vertx-lang-kotlin-coroutines</artifactId>
+			<version>4.3.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.vertx</groupId>
+			<artifactId>vertx-web-openapi</artifactId>
+			<version>4.3.3</version>
+		</dependency>
+		<dependency>
+			<groupId>io.vertx</groupId>
+			<artifactId>vertx-web-api-service</artifactId>
 			<version>4.3.3</version>
 		</dependency>
 		<dependency>
@@ -106,7 +117,34 @@
 		<sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
 		<testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
 		<plugins>
-			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>2.3</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<transformers>
+								<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+									<manifestEntries>
+										<Main-Class>io.vertx.core.Launcher</Main-Class>
+										<Main-Verticle>${main.verticle}</Main-Verticle>
+									</manifestEntries>
+								</transformer>
+								<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+							</transformers>
+							<artifactSet>
+							</artifactSet>
+							<outputFile>${project.build.directory}/${project.artifactId}-${project.version}-fat.jar</outputFile>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
 
 			<plugin>
 				<artifactId>kotlin-maven-plugin</artifactId>
@@ -209,6 +247,41 @@
 						<goals>
 							<goal>testCompile</goal>
 						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.4.0</version>
+				<executions>
+					<execution>
+						<id>run</id>
+						<goals>
+							<goal>java</goal>
+						</goals>
+						<configuration>
+							<mainClass>io.vertx.core.Launcher</mainClass>
+							<arguments>
+								<argument>run</argument>
+								<argument>${main.verticle}</argument>
+							</arguments>
+						</configuration>
+					</execution>
+
+					<execution>
+						<id>run-app</id>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<executable>java</executable>
+							<arguments>
+								<argument>-jar</argument>
+								<argument>target/${project.artifactId}-${project.version}-fat.jar</argument>
+							</arguments>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>

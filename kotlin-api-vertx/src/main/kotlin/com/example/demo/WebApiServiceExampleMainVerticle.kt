@@ -12,6 +12,7 @@ import io.vertx.core.json.JsonObject
 //import io.vertx.examples.webapiservice.services.TransactionsManagerService
 import io.vertx.ext.web.Router
 import io.vertx.ext.web.RoutingContext
+import io.vertx.ext.web.openapi.RouterBuilder
 //import io.vertx.ext.web.openapi.RouterBuilder
 //import io.vertx.serviceproxy.ServiceBinder
 import org.slf4j.LoggerFactory
@@ -50,7 +51,7 @@ class WebApiServiceExampleMainVerticle : AbstractVerticle() {
      * @return
      */
     private fun startHttpServer(): Future<Void>? {
-        /*return RouterBuilder.create(vertx, "openapi.json")
+        return RouterBuilder.create(vertx, "/users")
             .onFailure(Throwable::printStackTrace) // In case the contract loading failed print the stacktrace
             .compose { routerBuilder ->
                 // Mount services on event bus based on extensions
@@ -66,12 +67,12 @@ class WebApiServiceExampleMainVerticle : AbstractVerticle() {
                         ctx.failure()
                     )
                 }
-                server =
+                var server =
                     vertx.createHttpServer(HttpServerOptions().setPort(8080).setHost("localhost"))
                         .requestHandler(router)
                 server.listen().mapEmpty()
-            }*/
-        return null
+            }
+        //return null
     }
 
     override fun start(promise: Promise<Void>) {
