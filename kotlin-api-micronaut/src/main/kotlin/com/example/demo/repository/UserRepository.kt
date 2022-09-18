@@ -9,5 +9,5 @@ import io.micronaut.data.repository.CrudRepository
 @Repository
 interface UserRepository : CrudRepository<UserEntity, Long> {
     @Executable
-    fun findByLogin(login: String): UserEntity
+    public fun findByLogin(login: String): UserEntity
 }
