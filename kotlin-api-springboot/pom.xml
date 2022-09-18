@@ -12,7 +12,7 @@
 	<artifactId>kotlin-api-springboot</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>kotlin-api-springboot</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Kotlin api demo project using Spring Boot</description>
 	<properties>
 		<java.version>11</java.version>
 		<kotlin.version>1.6.21</kotlin.version>
